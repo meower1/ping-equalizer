@@ -170,7 +170,10 @@ public class RavenclawsPingEqualizerClient implements ClientModInitializer {
             return;
         }
         lastMessage = message;
-        sendPublicModeAnnouncement(message);
+    }
+
+    private void logNoChange(String message) {
+        sendLocalMessage(message);
     }
 
     private static void sendLocalMessage(String message) {
@@ -178,26 +181,6 @@ public class RavenclawsPingEqualizerClient implements ClientModInitializer {
         if (client.player != null) {
             client.player.sendMessage(Text.literal(message), false);
         }
-    }
-
-    private void sendPublicModeAnnouncement(String message) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.getNetworkHandler() == null || message == null || message.isEmpty()) {
-            return;
-        }
-        String sanitized = stripFormattingCodes(message.replace("\n", " ").trim());
-        if (sanitized.isEmpty()) {
-            return;
-        }
-        client.getNetworkHandler().sendChatMessage("[Ping Equalizer] " + sanitized);
-    }
-
-    private String stripFormattingCodes(String value) {
-        return value.replaceAll("\u00A7.", "");
-    }
-
-    private void logNoChange(String message) {
-        sendLocalMessage(message);
     }
 
     private boolean isChatCommandsOnly() {
